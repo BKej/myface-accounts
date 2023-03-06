@@ -34,6 +34,9 @@ namespace MyFace.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] CreatePostRequest newPost)
         {
+
+
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

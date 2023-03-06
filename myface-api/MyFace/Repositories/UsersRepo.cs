@@ -2,6 +2,9 @@
 using System.Linq;
 using MyFace.Models.Database;
 using MyFace.Models.Request;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
 
 namespace MyFace.Repositories
 {
@@ -67,6 +70,8 @@ namespace MyFace.Repositories
                 Username = newUser.Username,
                 ProfileImageUrl = newUser.ProfileImageUrl,
                 CoverImageUrl = newUser.CoverImageUrl,
+                HashedPassword = "hashed",
+                Salt = "salt"
             });
             _context.SaveChanges();
 
@@ -96,5 +101,27 @@ namespace MyFace.Repositories
             _context.Users.Remove(user);
             _context.SaveChanges();
         }
+
+        public static byte[] getSalt(){
+            byte[] salt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+
+            return salt;
+        }
+
+        public static string getHashCode(string password, byte[] salt){
+             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+
+                return hashed;
+        }
+
     }
 }
