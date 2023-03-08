@@ -125,21 +125,7 @@ namespace MyFace.Data
             string password = "password";
             byte[] salt = UsersRepo.getSalt();
             string hashed = UsersRepo.getHashCode(password, salt);
-            // byte[] salt = new byte[128 / 8];
-            // using (var rngCsp = new RNGCryptoServiceProvider())
-            // {
-            //     rngCsp.GetNonZeroBytes(salt);
-            // }
-
-        
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            // string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            //     password: password,
-            //     salt: salt,
-            //     prf: KeyDerivationPrf.HMACSHA256,
-            //     iterationCount: 100000,
-            //     numBytesRequested: 256 / 8));
-
+           
             return new User
             {
                 FirstName = Data[index][0],
@@ -147,7 +133,7 @@ namespace MyFace.Data
                 Username = Data[index][2],
                 Email = Data[index][3],
                 HashedPassword = hashed,
-                Salt = Convert.ToBase64String(salt),
+                Salt = salt,
                 ProfileImageUrl = ImageGenerator.GetProfileImage(Data[index][2]),
                 CoverImageUrl = ImageGenerator.GetCoverImage(index),
             };

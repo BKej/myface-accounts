@@ -15,7 +15,7 @@ namespace MyFace.Models.Database
 
         public string HashedPassword {get; set;}
 
-        public string Salt {get; set;}
+        public byte[] Salt {get; set;}
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
     }
